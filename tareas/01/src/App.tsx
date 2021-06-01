@@ -1,13 +1,12 @@
-import React from 'react';
+
 import './App.css';
-import Button from "@material-ui/core/Button";
+import { Game } from './componentes/Game';
+
 
 function App() {
   return (
     <div>
-      <Button variant="contained" color="primary">
-        Hola Mundo!
-      </Button>
+      <Game/>
     </div>
   );
 }
