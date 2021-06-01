@@ -1,18 +1,60 @@
 import React from 'react'
-import { Board, BoardProps } from './Board';
+import { Board, BoardProps, BoardType } from './Board';
 import {BarGame} from './BarGame'
-import { PieceGame } from './PieceGame';
+import { PieceGame, PieceGameType } from './PieceGame';
 
-type GameState = {
-    currentPlayer:string,
-    winner:string
+export type GameType= {
+    board:BoardType;
+    boardPieces:PieceGameType[][],
+}
+
+export interface GameState{
+    game: GameType,
 }
 
 export class Game extends React.Component<{}, GameState>{
 
     state:GameState = {
-        currentPlayer: "X",
-        winner: ''
+        game: {
+            board:{
+                currentPlayer: 'X',
+                winner: '',
+            },
+            boardPieces: [
+            [
+                {
+                    currentPlayer: ""
+                },
+                {
+                    currentPlayer: ""
+                },
+                {
+                    currentPlayer: ""
+                }
+            ],
+            [
+                {
+                    currentPlayer: ""
+                },
+                {
+                    currentPlayer: ""
+                },
+                {
+                    currentPlayer: ""
+                }
+            ],
+            [
+                {
+                    currentPlayer: ""
+                },
+                {
+                    currentPlayer: ""
+                },
+                {
+                    currentPlayer: ""
+                }
+            ],
+        ]}
     }
 
     constructor(props: {}){
@@ -20,10 +62,12 @@ export class Game extends React.Component<{}, GameState>{
         this.turnPlayer = this.turnPlayer.bind(this);
     }
 
-    turnPlayer(newCurrentPlayer:string, winner:string){
+    turnPlayer(board:BoardType){
         this.setState({
-            currentPlayer: newCurrentPlayer,
-            winner: winner
+            game: {
+                board: board,
+                boardPieces: this.state.game.boardPieces
+            }
         });
     }
 
@@ -31,13 +75,12 @@ export class Game extends React.Component<{}, GameState>{
         return (
             <div className="game">
                 <BarGame 
-                    currentPlayer={this.state.currentPlayer} 
-                    winner={this.state.winner} 
+                    currentPlayer={this.state.game.board.currentPlayer} 
+                    winner={this.state.game.board.winner} 
                     bgColor="red"/>
                 <Board 
-                    turnPlayer={this.turnPlayer} 
-                    currentPlayer={this.state.currentPlayer}
-                    winner={this.state.winner}
+                    game={this.state.game}
+                    turnPlayer={this.turnPlayer}
                 />
             </div>
         )

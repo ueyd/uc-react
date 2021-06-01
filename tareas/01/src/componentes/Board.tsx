@@ -1,99 +1,49 @@
-import { Divider } from '@material-ui/core';
-import { stat } from 'fs';
+
 import React from 'react'
-import { PieceGame, PieceGameProps } from './PieceGame';
+import {GameState} from './Game'
+import { PieceGame, PieceGameProps, PieceGameType } from './PieceGame';
 
-
-export type BoardProps = {
-    turnPlayer(newCurrentPlayer:string, winner:string):void,
+export type BoardType = {
     currentPlayer:string,
     winner:string
 }
 
-interface BoardState {
-    currentPlayer:string,
-    boardPieces:PieceGameProps[][],
-    
+export interface BoardProps extends GameState{
+    turnPlayer(board:BoardType):void;
 }
 
-export class Board extends React.Component<BoardProps, BoardState>{
-    
-    state:BoardState = {
-        currentPlayer: "X",
-        boardPieces: [
-            [
-                {
-                    currentPlayer: ""
-                },
-                {
-                    currentPlayer: ""
-                },
-                {
-                    currentPlayer: ""
-                }
-            ],
-            [
-                {
-                    currentPlayer: ""
-                },
-                {
-                    currentPlayer: ""
-                },
-                {
-                    currentPlayer: ""
-                }
-            ],
-            [
-                {
-                    currentPlayer: ""
-                },
-                {
-                    currentPlayer: ""
-                },
-                {
-                    currentPlayer: ""
-                }
-            ],
-        ],
-    }
+export class Board extends React.Component<BoardProps, {}>{
 
     constructor(props:BoardProps){
         super(props);
         this.onPieceClicked = this.onPieceClicked.bind(this);
-        this.setState({
-            currentPlayer: this.props.currentPlayer
-        });
     }
 
     onPieceClicked(rid?:number, cid?:number){
-        this.setState((state, props) => {
-            if(props.winner === '' && state.boardPieces[rid??0][cid??0].currentPlayer === ""){
-                state.boardPieces[rid??0][cid??0].currentPlayer = state.currentPlayer;
-                const {currentPlayer} = state;
-                const newCurrentPlayer = currentPlayer === "Y" || currentPlayer == "" ? "X" : "Y";
-                
-                //Validar si hay gane
-                const winner = this.validateWinner(state);
-                props.turnPlayer(newCurrentPlayer, winner);
-                
-                return { currentPlayer: newCurrentPlayer};
-            }
-            return { currentPlayer: state.currentPlayer};
-        });
+        const {currentPlayer, winner} = this.props.game.board;
+        const {boardPieces} = this.props.game;
+        const {turnPlayer} = this.props;
+        if(winner === '' && boardPieces[rid??0][cid??0].currentPlayer === ""){
+            boardPieces[rid??0][cid??0].currentPlayer = currentPlayer;
+            const newCurrentPlayer = currentPlayer === "Y" || currentPlayer == "" ? "X" : "Y";
+            //Validar si hay gane
+            const winner = this.validateWinner();
+            turnPlayer({currentPlayer: newCurrentPlayer, winner});
+        }
     }
 
-    validateWinner(state:BoardState){
-        
+    validateWinner(){
+        const {boardPieces} = this.props.game;
         let winner = '';
         let vertical:string[][] = []
-        for (let i = 0; i < state.boardPieces.length; i++) {
-            const row = state.boardPieces[i];
+        for (let i = 0; i < boardPieces.length; i++) {
+            const row = boardPieces[i];
             //Validar lineas horizontal
             if(row[0].currentPlayer != ''
                 && row[0].currentPlayer === row[1].currentPlayer
                 && row[1].currentPlayer === row[2].currentPlayer)
                 winner = row[0].currentPlayer;
-
+            
             //Validar lineas verticales
             for (let j = 0; j < row.length; j++) {
                 const col = row[j].currentPlayer;
@@ -112,15 +62,14 @@ export class Board extends React.Component<BoardProps, BoardState>{
 
         //Diagonales
         // \
-        console.log(winner !== '');
-        let c1 = state.boardPieces[0][0].currentPlayer, 
-            c2 = state.boardPieces[1][1].currentPlayer, 
-            c3 = state.boardPieces[2][2].currentPlayer;
+        let c1 = boardPieces[0][0].currentPlayer, 
+            c2 = boardPieces[1][1].currentPlayer, 
+            c3 = boardPieces[2][2].currentPlayer;
         if(winner === '' && c1!=='' && c1===c2 && c2===c3)
             winner = c1;
-        c1 = state.boardPieces[0][2].currentPlayer; 
-        c2 = state.boardPieces[1][1].currentPlayer; 
-        c3 = state.boardPieces[2][0].currentPlayer;
+        c1 = boardPieces[0][2].currentPlayer; 
+        c2 = boardPieces[1][1].currentPlayer; 
+        c3 = boardPieces[2][0].currentPlayer;
         if(winner === '' && c1!=='' && c1===c2 && c2===c3)
             winner = c1;
         return winner;
@@ -128,15 +77,19 @@ export class Board extends React.Component<BoardProps, BoardState>{
 
     render(){
         const board = [];
-        for (let i = 0; i < this.state.boardPieces.length; i++) {
-            const pieces = this.state.boardPieces[i];
+        const {currentPlayer, winner} = this.props.game.board;
+        const {boardPieces} = this.props.game;
+        for (let i = 0; i < boardPieces.length; i++) {
+            const pieces = boardPieces[i];
             for (let j = 0; j < pieces.length; j++) {
                 const piece = pieces[j];
                 board.push(<PieceGame 
-                    currentPlayer={this.state.currentPlayer} 
-                    rid={i}
-                    cid={j}
-                    handlerPiece={this.props.winner === '' ? this.onPieceClicked : undefined}/>) 
+                    pieceGame={{
+                        currentPlayer: piece.currentPlayer,
+                        rid:i,
+                        cid:j
+                    }}
+                    handlerPiece={this.onPieceClicked}/>) 
             }
             board.push(<br/>)
         }

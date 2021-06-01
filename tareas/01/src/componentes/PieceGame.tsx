@@ -1,51 +1,42 @@
 import { Button } from '@material-ui/core';
 import React from 'react'
 
-export type PieceGameProps = {
+export type PieceGameType = {
     currentPlayer:string,
-    rid?:number, 
-    cid?:number,
+    rid?:number,
+    cid?:number
+}
+
+export interface PieceGameProps {
+    pieceGame:PieceGameType,
     handlerPiece?(rid?:number, cid?:number):void
 }
 
-interface PieceGameState {
-    currentPlayer:string
-}
 
-export class PieceGame extends React.Component<PieceGameProps, PieceGameState>{
+export class PieceGame extends React.Component<PieceGameProps, {}>{
     
     constructor(props:PieceGameProps) {
         super(props);
     }
 
-    state = {
-        currentPlayer: ''
-    }
-
-    console(){
-        console.log(this.props);
-    }
-
     handlerPiece(){
-        this.setState((state, props)=>{
-            if(state.currentPlayer === '')
-            {
-                if(this.props.handlerPiece != undefined){
-                    this.props.handlerPiece(this.props.rid, this.props.cid);
-                    return { currentPlayer: props.currentPlayer };
-                }
-                return { currentPlayer: state.currentPlayer };
+        this.setState((state, props) => {
+            const {currentPlayer, rid, cid} = props.pieceGame;
+            const {handlerPiece} = props;
+            if(handlerPiece != undefined){
+                handlerPiece(rid, cid);
             }
         });
     }
 
     render(){
+        const {currentPlayer} = this.props.pieceGame;
         return (
-            <Button className={this.state.currentPlayer === '' ? 'pieceGame' : (this.state.currentPlayer==='X' ? 'pieceGame pone' : 'pieceGame ptwo')}
+            <Button className={currentPlayer === '' ? 'pieceGame' : (currentPlayer==='X' ? 'pieceGame pone' : 'pieceGame ptwo')}
                 variant="contained"
                 onClick={() => this.handlerPiece()}
             >
-                {this.state.currentPlayer}
+                {currentPlayer}
             </Button>
         )
     }
