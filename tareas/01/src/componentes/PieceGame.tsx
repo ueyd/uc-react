@@ -20,8 +20,8 @@ export class PieceGame extends React.Component<PieceGameProps, {}>{
     }
 
     handlerPiece(){
-        this.setState((state, props) => {
-            const {currentPlayer, rid, cid} = props.pieceGame;
+        this.setState((_, props) => {
+            const {rid, cid} = props.pieceGame;
             const {handlerPiece} = props;
             if(handlerPiece != undefined){
                 handlerPiece(rid, cid);
@@ -32,7 +32,7 @@ export class PieceGame extends React.Component<PieceGameProps, {}>{
     render(){
         const {currentPlayer} = this.props.pieceGame;
         return (
-            <Button className={currentPlayer === '' ? 'pieceGame' : (currentPlayer==='X' ? 'pieceGame pone' : 'pieceGame ptwo')}
+            <Button onMouseEnter={} className={currentPlayer === '' ? 'pieceGame' : (currentPlayer==='X' ? 'pieceGame pone' : 'pieceGame ptwo')}
                 variant="contained"
                 onClick={() => this.handlerPiece()}
             >

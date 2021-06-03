@@ -2,7 +2,7 @@
 import './App.css';
 import React from 'react'
 import {Table, User} from './components/Table'
-
+import {Form} from './components/Form'
 
 type MyState = {
   users: User[]
@@ -36,10 +36,19 @@ class App extends React.Component<{}, MyState> {
     });
   }
 
+  handleSubmit = (user:User) => {
+    this.setState(
+      {
+        users: [...this.state.users, user]
+      }
+    )
+  } 
+
   render() {
     return (
       <div className="App">
         <Table users={this.state.users} handlerRemoveUser={this.removeUser}/>
+        <Form handleSubmit={this.handleSubmit}/>
       </div>)
   }
 }
