@@ -38,15 +38,27 @@ code {
 }
 
 .pieceGame{
-  width: 30%;
-  height: 30%;
+  width: 100%;
+  height: 100px;
   margin: 1.5% !important;
-  background-color: coral !important;
+  background-color: coral;
 }
 
+/* .pieceGame:hover{
+  width: 100%;
+  height: 100px;
+  margin: 1.5% !important;
+  background-color: rgb(71, 23, 5) !important;
+} */
+
 .pone{
-  background-color: rgb(150, 0, 177) !important;
+  background-color: #9600b1 !important;
 }
 .ptwo{
-  background-color: rgb(76, 143, 0) !important;
+  background-color: #4c8f00 !important;
+}
+
+.row-pieces {
+  display: flex; /* or inline-flex */
+  justify-content: space-around;
 }

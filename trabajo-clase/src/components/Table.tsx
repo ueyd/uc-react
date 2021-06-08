@@ -1,27 +1,30 @@
 import React from 'react';
-import {TableHeader} from './TableHeader';
-import {TableBody} from './TableBody';
+import { TableBody } from './TableBody';
+import { TableHeader } from './TableHeader';
+
 
 export type User = {
-    name: string,
-    job: string
+	name:string;
+	job:string;
 }
 
 export interface TableProps {
-    users:User[],
-    handlerRemoveUser: (e:any) => void;
+	users:User[]
+	removeUser:(e:number) => void;
 }
 
-export const Table:React.FC<TableProps> = ({users, handlerRemoveUser}) => {
+export const Table:React.FC<TableProps> = ({users, removeUser}) =>{
 
-    const onClickGretting = (username:string) => {
-        alert(`Hola ${username}!`)
-    }
-
-    return (
-        <table>
-            <TableHeader/>
-            <TableBody users={users} handler={onClickGretting} handlerRemoveUser={handlerRemoveUser}/>
-        </table>
-    )
+	const handleGreeting = (name:string) =>{
+		alert(`Hola ${name}!`);
+	}
+	
+	return(
+		<table>
+			<TableHeader/>
+			<TableBody users={users} handler={handleGreeting} removeUser={removeUser}/>
+		</table>
+	)
 }
+
+// export default Table;

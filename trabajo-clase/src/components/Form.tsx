@@ -13,7 +13,30 @@ export class Form extends React.Component<FormProps>{
     }
 
     state = this.initialState;
+
+    options = [
+        {
+            label: 'San José',
+            value: 'SJ'
+        },
+        {
+            label: 'Heredia',
+            value: 'H'
+        },
+        {
+            label: 'Alajuela',
+            value: 'A'
+        }
+    ]
+
     handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target;
+        this.setState({
+            [name]: value
+        });
+    }
+
+    handleChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const {name, value} = event.target;
         this.setState({
             [name]: value
@@ -33,6 +56,14 @@ export class Form extends React.Component<FormProps>{
                 <input type="text" name="name" id="name" value={name} onChange={this.handleChange}/>
                 <label htmlFor="job">Job</label>
                 <input type="text" name="job" id="job" value={job} onChange={this.handleChange}/>
+                <label htmlFor="address">Address</label>
+                <select name="address" id="address" onChange={this.handleChangeSelect}>
+                    {this.options.map (
+                        option => 
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    )}
+                </select>
+                
                 <input type="button" value="submit" onClick={this.submitForm}/>
             </form>
         );
