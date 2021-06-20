@@ -11,7 +11,7 @@ export class Plant extends React.Component<IPlantProps, {}>{
     render(){
         const {id, description, imgURL, quantity, title} = this.props.plant;
         return (
-            <div className="col-sm-6">    
+            <div className="col-sm-3">    
                 <div className="card">
                     <div className="card-body">
                     <img src={imgURL} className="card-img-top card-img" alt={title}/>

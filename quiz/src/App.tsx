@@ -18,7 +18,6 @@ export class App extends React.Component<{}, IAppState>{
 
   constructor(props:{}){
     super(props);
-    //this.state = this.GetInitialState();
     this.eQuantityChange = this.eQuantityChange.bind(this);
   }
 
@@ -28,20 +27,30 @@ export class App extends React.Component<{}, IAppState>{
 
   eQuantityChange(id:number, action:string){
     this.setState(state => {
-      const plants = state.plants.map(
+      const {plants} = state;
+      const plantsMod = plants.map(
         (plant) => {
           if(plant.id === id)
           {
-            if(action === CONSTANTES.AUMENTAR) plant.quantity++; 
-            if(action === CONSTANTES.DISMINUIR) plant.quantity--;
+            let quantity = plant.quantity;
+            if(action === CONSTANTES.AUMENTAR) quantity = plant.quantity + 1; 
+            if(action === CONSTANTES.DISMINUIR) quantity = plant.quantity - 1;
+            let newPlant = {
+              id:id,
+              title: plant.title,
+              description:  plant.description,
+              imgURL:  plant.imgURL,
+              quantity: quantity
+            }
+            return newPlant;
           }
           return plant;
         }
       );
-      const foundIndex = plants.findIndex(p => p.id === id);
-      if(plants[foundIndex] && plants[foundIndex].quantity <= 0)
-        plants.splice(foundIndex, 1);
-      return { plants }
+      const foundIndex = plantsMod.findIndex(p => p.id === id);
+      if(plantsMod[foundIndex] && plantsMod[foundIndex].quantity <= 0)
+        plantsMod.splice(foundIndex, 1);
+      return { plants: plantsMod }
     });
   }
 
