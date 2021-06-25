@@ -1,0 +1,6 @@
+@import-normalize; 
+
+.wrapper{
+    background-color: antiquewhite;
+    height: 50vh;
+}

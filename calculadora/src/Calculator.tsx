@@ -1,6 +1,7 @@
 import React from 'react';
 import {BoilingVerdict} from './BoilingVerdict'
 import { ScaleType, TemperatureInput } from './TemperatureInput';
+import styled from 'styled-components'
 
 export interface ICalculatorState {
     temperature:string;
@@ -47,19 +48,21 @@ export class Calculator extends React.Component<{}, ICalculatorState> {
         const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
         const farenheit = scale === 'c' ? tryConvert(temperature, toFarenheit) : temperature;
         const boilingStatus = parseFloat(celsius);
-        return <div>
+        return <Container>
             <TemperatureInput scale={ScaleType.C} temperature={celsius} onTemperatureChange={this.handleCelsiusChange}/>
             <TemperatureInput scale={ScaleType.F} temperature={farenheit} onTemperatureChange={this.handleFarenheitChange}/>
             <BoilingVerdict celsius={boilingStatus}/>
-        </div>
-        // return (
-        //     <div>
-        //         {celsius >= 100 ? (
-        //             <p>The water would boil</p>
-        //         ):(
-        //             <p>The water would not boil</p>
-        //         )}
-        //     </div>   
-        // )
+        </Container>
     }
 }
+
+const Container = styled.div`
+    height: 400px;
+    border: 2px solid #cdcccc;
+    background: #fff;
+    box-shadow: 1px 1px 2px #000;
+    fieldset{
+        color: #fff;
+        background: #29107e;
+    }
+`;

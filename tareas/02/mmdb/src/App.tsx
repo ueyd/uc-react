@@ -12,12 +12,16 @@ export class App extends React.Component {
             MMDB
           </p>
           
-          <div>
+          
+        </header>
+        <main>
+        <div>
             <h1>Peliculas </h1>
             <Home/>
           </div>
-        </header>
+        </main>
       </div>
+      
     );
   }
 }
