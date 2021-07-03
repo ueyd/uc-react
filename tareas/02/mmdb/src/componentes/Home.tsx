@@ -1,7 +1,8 @@
 import React from "react";
-import { MovieResultToMovieType } from "./Movie";
-import { MovieListType, MovieList } from "./MovieList";
-import axios from "axios";
+import { MovieResultToMovieType } from "./Movie/Movie";
+import { MovieListType, MovieList } from "./Movie/MovieList";
+import {THE_MOVIE_DB} from '../util/Constantes'
+import styled from "styled-components";
 
 export type HomeType = {};
 
@@ -11,13 +12,28 @@ export interface IHomeState {
     moviesList: MovieListType[],
 }
 
-const api = axios.create({
-  headers: {
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YTRiM2Y0MmU4ZjJhYTAwNTFiOTEyZDQzMDU3NzFjNSIsInN1YiI6IjYwYjk2NjQ0Y2QyZjBmMDA1OWY4M2U2NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.2OVCbJhE0LVpD8xODPylkC0PLHQUGQBL7_40T69vg8w",
-  },
-  baseURL: "https://api.themoviedb.org/3",
-});
+const urlMoviesList:any = [
+    {
+        url: "/movie/upcoming",
+        title: "Up Coming"
+    },
+    {
+        url: "/movie/top_rated",
+        title: "Top Rated"
+    },
+    {
+        url: "/movie/popular",
+        title: "Popular"
+    }
+]
+
+const WrapperMovieList = styled.div`
+
+`
+
+const Wrapper = styled.div`
+
+`
 
 export class Home extends React.Component<IHomeProps, IHomeState> {
 
@@ -26,7 +42,7 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
     }
 
     GetMovieList = async(url:string, title:string) => {
-        const moviesResult = await api
+        const moviesResult = await THE_MOVIE_DB
           .get(url)
           .then(({ data }) => data.results)
           .catch();
@@ -37,45 +53,41 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
             movieList:movies,
             titleList: title
         }
-        this.setState((state, _) => {
-            let { moviesList } = state;
-            moviesList.push(newList);
-            return {moviesList};
-        });
+        return newList;
     }
 
-    // constructor(props:IHomeProps){
-    //     super(props);
-        
-    //     // this.GetMovieList("/movie/top_rated");
-    //     // this.GetMovieList("/movie/popular");
-    // }
-
-    componentDidMount(){
-        this.GetMovieList("/movie/upcoming", "Up Coming");
+    async componentDidMount(){
+        let moviesList:MovieListType[] = [];
+        for (let index = 0; index < urlMoviesList.length; index++) {
+            const {url, title} = urlMoviesList[index];
+            let movieList = await this.GetMovieList(url, title);
+            moviesList.push(movieList);
+        }
+        this.setState({moviesList});
     }
 
     render() {
         const { moviesList } = this.state;
         return (
-        <div>
+        <Wrapper>
             {moviesList.map((movieList:MovieListType, idx:number) =>
                 {
                     const key = movieList.titleList.replace(" ", "_") + "_" + idx.toString();
-                    return <MovieList key={key} movieList={movieList} />;
+                    return <WrapperMovieList key={key} ><MovieList movieList={movieList} /></WrapperMovieList> ;
                 }
             )}
-        </div>
+        </Wrapper>
         );
     }
 }
 
+
 // export const Home:React.FC = () => {
-    
+
 //     //GetMovieList("/movie/upcoming")
 
 //     const [movieLists, setMovieLists] = useState<MovieListType[]>([]);
-//     const GetMovieList = async (url:string) => {
+//     const GetMovieList = async (url:string, title:string) => {
 //         const moviesResult = await api
 //           .get(url)
 //           .then(({ data }) => data.results)
@@ -85,30 +97,36 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
 //         });
 //         let newList = {
 //             movieList:movies,
-//             titleList: url
+//             titleList: title
 //         }
 //         return newList;
 //     }
+
+//     const Init = () =>{
+//         GetMovieList("/movie/upcoming", "Up Coming").then(movieList => {
+//             movieLists.push(movieList);
+//             setMovieLists(movieLists);
+//         });
+//         GetMovieList("/movie/top_rated", "Top Rated").then(movieList => {
+//             movieLists.push(movieList);
+//             setMovieLists(());
+//         });
+//         GetMovieList("/movie/popular", "Popular").then(movieList => {
+//             movieLists.push(movieList);
+//             setMovieLists(movieLists);
+//         });
+//     }
 //     //Hook para iniciar el componente
 //     useEffect(()=>{
-//         GetMovieList("/movie/upcoming").then(movieList => {
-//             movieLists.push(movieList);
-//             setMovieLists(movieLists);
-//         });
-//         GetMovieList("/movie/top_rated").then(movieList => {
-//             movieLists.push(movieList);
-//             setMovieLists(movieLists);
-//         });
-//         GetMovieList("/movie/popular").then(movieList => {
-//             movieLists.push(movieList);
-//             setMovieLists(movieLists);
-//         });
-//         console.log(movieLists);
+//         Init();
 //     }, []);
 
 //     return <div>
-//         {movieLists.map((movieList:MovieListType) =>
-//             <MovieList movieList={movieList} />
-//         )}
+//         <button onClick={() => console.log(movieLists)}>Iniciar</button>
+//         {movieLists.map((movieList:MovieListType, idx:number) => {
+//             const key = movieList.titleList.replace(" ", "_") + "_" + idx.toString();
+//             console.log(key);
+//             return <MovieList key={key} movieList={movieList} />
+//         })}
 //     </div>
 // }
