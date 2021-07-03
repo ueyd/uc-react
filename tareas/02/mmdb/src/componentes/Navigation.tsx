@@ -81,6 +81,5 @@ export const Navigation:React.FC = () => {
             })}
             </ul>
         </nav>
-        <a href="#" className="cta"><button>Contact</button></a>
     </Header>
 }
