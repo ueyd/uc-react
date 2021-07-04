@@ -1,8 +1,9 @@
 import React from "react";
 import { MovieResultToMovieType } from "./Movie/Movie";
 import { MovieListType, MovieList } from "./Movie/MovieList";
-import {THE_MOVIE_DB} from '../util/Constantes'
+// import {THE_MOVIE_DB} from '../util/Constantes'
 import styled from "styled-components";
+import { SVGetMovieList } from "../services/themoviedb/MovieService";
 
 export type HomeType = {};
 
@@ -41,26 +42,26 @@ export class Home extends React.Component<IHomeProps, IHomeState> {
         moviesList:[]
     }
 
-    GetMovieList = async(url:string, title:string) => {
-        const moviesResult = await THE_MOVIE_DB
-          .get(url)
-          .then(({ data }) => data.results)
-          .catch();
-        let movies = moviesResult.map((movie:any) => {
-            return MovieResultToMovieType(movie);
-        });
-        let newList = {
-            movieList:movies,
-            titleList: title
-        }
-        return newList;
-    }
+    // GetMovieList = async(url:string, title:string) => {
+    //     // const moviesResult = await THE_MOVIE_DB
+    //     //   .get(url)
+    //     //   .then(({ data }) => data.results)
+    //     //   .catch();
+    //     // let movies = moviesResult.map((movie:any) => {
+    //     //     return MovieResultToMovieType(movie);
+    //     // });
+    //     // let newList = {
+    //     //     movieList:movies,
+    //     //     titleList: title
+    //     // }
+    //     // return newList;
+    // }
 
     async componentDidMount(){
         let moviesList:MovieListType[] = [];
         for (let index = 0; index < urlMoviesList.length; index++) {
             const {url, title} = urlMoviesList[index];
-            let movieList = await this.GetMovieList(url, title);
+            let movieList = await SVGetMovieList(url, title);
             moviesList.push(movieList);
         }
         this.setState({moviesList});

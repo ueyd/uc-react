@@ -245,6 +245,14 @@ const Card = styled.div`
     }
     ${MenuContent} a {
         color: #fff;
+        cursor: pointer;
+        /* background-color: transparent;
+        border: none;
+        
+        padding: 5px;
+        :hover{
+            background-color: #000000a9;
+        } */
     }
     ${MenuContent} span {
         position: absolute;
@@ -328,8 +336,10 @@ export const Movie:React.FC<IMovieProps> = (props) => {
                         <span className='year'>2016</span> */}
                     </DateInfo>
                     <MenuContent>
-                        <li><a>✔</a></li>
-                        <li><a>❤<span>{voteAverage}</span></a></li>
+                        <li><a>J</a></li>
+                        <li><a onClick={() => console.log('asdas')}>A</a><span>{voteAverage}</span></li>
+                        {/* <li><a>✔</a></li>
+                        <li><a>❤<span>{voteAverage}</span></a></li> */}
                         {/* <li><a>❤</a></li> */}
                     </MenuContent>
                 </Header>

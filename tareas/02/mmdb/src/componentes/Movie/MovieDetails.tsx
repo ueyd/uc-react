@@ -1,31 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import { THE_MOVIE_DB } from "../../util/Constantes";
+import { useHistory, useParams } from "react-router-dom";
 import { GetUrlImg } from "../../util/Utilitario";
-import { MovieResultToMovieType, MovieType } from "./Movie";
+import {  MovieType } from "./Movie";
 import styled from "styled-components";
-
-
 import { Modal } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
 import { MovieRating } from "./MovieRating";
-// const Modal = styled.div`
-//   /* position: absolute;
-//   top: 0;
-//   left: 0;
-//   z-index: 1050;
-//   display: none;
-//   width: 100%;
-//   height: 100%;
-//   overflow: hidden;
-//   outline: 0; */
-//   position: "absolute";
-//   top: 0;
-//   left: 0;
-//   bottom: 0;
-//   right: 0;
-//   background: "rgba(0, 0, 0, 0.15)";
-// `
+import { SVGetMovieDetails } from "../../services/themoviedb/MovieService";
+
 
 const WrapperMovieDetails = styled.div`
   position: relative;
@@ -34,17 +16,14 @@ const WrapperMovieDetails = styled.div`
   padding: 2rem;
   background-color: #323233;
   color: #ebebeb;
-  /* padding-top: 5vh;
-  margin-bottom: 5vh; */
-  /* min-height: 800px; */
   margin: 0 auto;
   margin-top: 2rem;
   border-radius: 4px;
 `
 const BtnCerrar = styled.button`
-  position: relative;
-  left: 0;
-  top: 0;
+  position: absolute;
+  left: calc(100% - 2.5rem);
+    top: 0.5rem;
   float: right;
   border: none;
   width: 2rem;
@@ -54,6 +33,12 @@ const BtnCerrar = styled.button`
   font-size: 14px;
   background-color: #676767;
   font-weight: 600;
+  :hover{
+    font-size: 15px;
+    background-color: #5c5c5c;
+    font-weight: 600;
+    cursor: pointer;
+  }
 `
 
 const OverView = styled.div`
@@ -80,6 +65,7 @@ const BodyDetails = styled.div`
 const DivImg = styled.div`
   text-align: center;
 `
+
 const MovieDetailsModal = (back:any, movie?:MovieType) => {
     const urlImage = GetUrlImg(movie?.posterPath);
     
@@ -101,13 +87,14 @@ const MovieDetailsModal = (back:any, movie?:MovieType) => {
                 </DivImg>
                 <BodyDetails>
                   <OverView>
+                    <h5>Overview</h5>
                     <p>{movie?.overview}</p>
                   </OverView>
                   <Info>
-                    <h5>Información</h5>
-                    <p>Puntuación: {movie?.voteAverage}</p>
-                    <p>originalTitle: {movie?.originalTitle}</p>
-                    <p>originalLanguage: {movie?.originalLanguage}</p>
+                    <h5>Information</h5>
+                    <p>Vote: {movie?.voteAverage}</p>
+                    <p>Title: {movie?.originalTitle}</p>
+                    <p>Lan: {movie?.originalLanguage}</p>
                     <MovieRating idMovie={movie?.id}/>
                   </Info>
                 </BodyDetails>
@@ -135,29 +122,14 @@ const MovieDetailsModal = (back:any, movie?:MovieType) => {
 //   );
 // };
 
-const urlGetMovieDetails = "https://api.themoviedb.org/3/movie/{id}";
-
-const GetMovieDetails = async (id: string) => {
-  const moviesResult = await THE_MOVIE_DB.get(
-    urlGetMovieDetails.replace("{id}", id)
-  )
-    .then(({ data }) => data)
-    .catch();
-  return MovieResultToMovieType(moviesResult);
-};
-
 export const MovieDetails: React.FC<{}> = ({}) => {
   const history = useHistory();
-  // let location = useLocation();
-  // // let background = location.state && location.state.background;
-  // console.log(location.state);
-  // const route = history.location.pathname;
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieType>();
 
   useEffect(() => {
     const getMovieAsync = async () => {
-      setMovie(await GetMovieDetails(id));
+      setMovie(await SVGetMovieDetails(id));
     };
     getMovieAsync();
   }, []);
