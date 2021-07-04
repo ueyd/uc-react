@@ -331,13 +331,10 @@ export const Movie:React.FC<IMovieProps> = (props) => {
                 <Header>
                     <DateInfo>
                         {releaseDate}
-                        {/* <span className='day'>12</span>
-                        <span className='month'>Aug</span>
-                        <span className='year'>2016</span> */}
                     </DateInfo>
                     <MenuContent>
-                        <li><a>J</a></li>
-                        <li><a onClick={() => console.log('asdas')}>A</a><span>{voteAverage}</span></li>
+                        <li><a>+ Wishlist</a></li>
+                        <li><a onClick={() => console.log('asdas')}>+ Watched</a><span> Votes {voteAverage}</span></li>
                         {/* <li><a>✔</a></li>
                         <li><a>❤<span>{voteAverage}</span></a></li> */}
                         {/* <li><a>❤</a></li> */}
