@@ -338,8 +338,8 @@ export const Movie:React.FC<IMovieProps> = (props) => {
                     </DateInfo>
                     { ValidateLocalStorage("name") ? 
                     <MenuContent>
-                        <li><a onClick={() => SVWatchlist(id)}>+ Wishlist</a></li>
-                        <li><a onClick={() => SVAsFavorite(id)}>+ Watched</a><span> Votes {voteAverage}</span></li>
+                        <li><a onClick={() => SVWatchlist(id, true)}>+ Watchlist</a></li>
+                        <li><a onClick={() => SVAsFavorite(id, true)}>+ Favorites</a><span> Votes {voteAverage}</span></li>
                         {/* <li><a>✔</a></li>
                         <li><a>❤<span>{voteAverage}</span></a></li> */}
                         {/* <li><a>❤</a></li> */}

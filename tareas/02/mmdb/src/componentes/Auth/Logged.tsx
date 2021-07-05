@@ -13,6 +13,7 @@ export const Logged = () => {
             const GetAccountDetails = async(session_id:string) => {
                 const accountDetails = await SVAccountDetails(session_id);
                 localStorage.setItem("name", accountDetails.username);
+                localStorage.setItem("acc_id", accountDetails.id);
                 history.push("/");
             }
             const ValidateLogIn = async() => {

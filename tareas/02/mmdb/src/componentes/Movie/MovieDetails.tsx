@@ -139,7 +139,6 @@ export const MovieDetails: React.FC = () => {
 
   const handleRate = (value:number) => {
     let movieEdited = movie;
-    console.log(movieEdited);
     if(movieEdited !== undefined)
     {
       movieEdited.myVote = value;
