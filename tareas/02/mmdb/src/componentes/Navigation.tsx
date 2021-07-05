@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import styled from 'styled-components';
 import logo from '../logo.png'
 import { GetNewToken } from '../services/themoviedb/AuthService';
@@ -70,13 +70,24 @@ const Header = styled.header`
 
 export const Navigation:React.FC = () => {
 
-    const LogIn = async() => {
-        const token = await GetNewToken();
-        window.open("https://www.themoviedb.org/authenticate/" + token + "?redirect_to=http://localhost:3000/logged", "_blank");
-        console.log(token);
+    const history = useHistory();
+    const GetText = () => {
+        return (localStorage.getItem("session_id") === null || localStorage.getItem("session_id") === undefined) ? 'Log In' : 'Sign out';
     }
-    /*
-     */
+    const LogIn = async() => {
+        console.log(localStorage.getItem("session_id"));
+        if(localStorage.getItem("session_id") === null || localStorage.getItem("session_id") === undefined)
+        {
+            const token = await GetNewToken();
+            window.open("https://www.themoviedb.org/authenticate/" + token + "?redirect_to=http://localhost:3000/logged", "_blank");
+        }
+        else 
+        {
+            localStorage.removeItem("session_id");
+            history.push("/");
+        }
+    }
+    
     return <Header>
         <img src={logo} alt="" className="logo"/>
         <nav>
@@ -88,6 +99,6 @@ export const Navigation:React.FC = () => {
             })}
             </ul>
         </nav>
-        <button onClick={() => {LogIn()}}>Log In</button>
+        <button onClick={() => {LogIn()}}>{GetText()}</button>
     </Header>
 }

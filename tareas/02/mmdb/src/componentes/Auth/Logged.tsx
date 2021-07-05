@@ -1,15 +1,13 @@
 // import React, { useState } from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { GetNewSession } from "../../services/themoviedb/AuthService";
 
 
 
 export const Logged = () => {
-
     const location = useLocation();
-    // const { request_token } = useParams<{ request_token: string }>();
-
+    const history = useHistory();
     //Al iniciar el cmp
     useEffect(() => {
         //Solicitar iniciar sesión
@@ -18,13 +16,14 @@ export const Logged = () => {
         {
             const ValidateLogIn = async() => {
                 const session_id = await GetNewSession(token ?? undefined);
-                console.log("Guardar globalmente para usar en todas las peticiones");
-                console.log(session_id);
+                localStorage.setItem("session_id", session_id);
+                history.push("/");
             }
             ValidateLogIn();
         }
     }, []);
+
     return <div>
-        Logged
+        Logged 
     </div>
 }
