@@ -1,8 +1,11 @@
+
 import React from 'react';
 import {Link, useHistory} from 'react-router-dom'
 import styled from 'styled-components';
 import logo from '../logo.png'
 import { GetNewToken } from '../services/themoviedb/AuthService';
+import { UserInfo } from './Auth/UserInfo';
+
 
 const NavigationOpts:any = [
     {
@@ -28,7 +31,7 @@ const Header = styled.header`
     justify-content: space-between;
     align-items: center;
     padding: 15px 10%;
-    li, a, button {
+    li, a {
         font-weight: 500;
         font-size: 16px;
         color: #edf0f1;
@@ -70,23 +73,23 @@ const Header = styled.header`
 
 export const Navigation:React.FC = () => {
 
-    const history = useHistory();
-    const GetText = () => {
-        return (localStorage.getItem("session_id") === null || localStorage.getItem("session_id") === undefined) ? 'Log In' : 'Sign out';
-    }
-    const LogIn = async() => {
-        console.log(localStorage.getItem("session_id"));
-        if(localStorage.getItem("session_id") === null || localStorage.getItem("session_id") === undefined)
-        {
-            const token = await GetNewToken();
-            window.open("https://www.themoviedb.org/authenticate/" + token + "?redirect_to=http://localhost:3000/logged", "_blank");
-        }
-        else 
-        {
-            localStorage.removeItem("session_id");
-            history.push("/");
-        }
-    }
+    //const history = useHistory();
+    // const GetText = () => {
+    //     return (localStorage.getItem("session_id") === null || localStorage.getItem("session_id") === undefined) ? 'Log In' : 'Sign out';
+    // }
+    // const LogIn = async() => {
+    //     console.log(localStorage.getItem("session_id"));
+    //     if(localStorage.getItem("session_id") === null || localStorage.getItem("session_id") === undefined)
+    //     {
+    //         const token = await GetNewToken();
+    //         window.open("https://www.themoviedb.org/authenticate/" + token + "?redirect_to=http://localhost:3000/logged", "_blank");
+    //     }
+    //     else 
+    //     {
+    //         localStorage.removeItem("session_id");
+    //         history.push("/");
+    //     }
+    // }
     
     return <Header>
         <img src={logo} alt="" className="logo"/>
@@ -99,6 +102,6 @@ export const Navigation:React.FC = () => {
             })}
             </ul>
         </nav>
-        <button onClick={() => {LogIn()}}>{GetText()}</button>
+        <UserInfo></UserInfo>
     </Header>
 }

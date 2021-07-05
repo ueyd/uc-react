@@ -23,7 +23,6 @@ export const SVGetMovieList = async(url:string, title:string) => {
     return newList;
 }
 
-
 //Url require an session_id
 const urlGetMovieIdAcc = '/movie/{id}/account_states';
 export const SVGetMovieDetails = async(id:string) => {
