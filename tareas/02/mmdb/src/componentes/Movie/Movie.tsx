@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Link, useLocation} from 'react-router-dom'
-import { GetUrlImg } from '../../util/Utilitario';
+import { GetUrlImg, ValidateLocalStorage } from '../../util/Utilitario';
+import { SVAsFavorite, SVWatchlist } from '../../services/themoviedb/MovieService';
 //import styles from  '../../css/Movie.module.css';
 
 
@@ -335,13 +336,17 @@ export const Movie:React.FC<IMovieProps> = (props) => {
                     <DateInfo>
                         {releaseDate}
                     </DateInfo>
+                    { ValidateLocalStorage("name") ? 
                     <MenuContent>
-                        <li><a>+ Wishlist</a></li>
-                        <li><a onClick={() => console.log('asdas')}>+ Watched</a><span> Votes {voteAverage}</span></li>
+                        <li><a onClick={() => SVWatchlist(id)}>+ Wishlist</a></li>
+                        <li><a onClick={() => SVAsFavorite(id)}>+ Watched</a><span> Votes {voteAverage}</span></li>
                         {/* <li><a>✔</a></li>
                         <li><a>❤<span>{voteAverage}</span></a></li> */}
                         {/* <li><a>❤</a></li> */}
                     </MenuContent>
+                    : 
+                    ''
+                    }
                 </Header>
                 <Link to={{pathname: urlDetails, state: {background:location}}}>
                     <Data>

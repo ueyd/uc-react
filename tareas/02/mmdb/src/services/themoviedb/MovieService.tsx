@@ -54,3 +54,11 @@ export const SVRateMovie = async(idMovie:number, value:number) => {
     const result = await THE_MOVIE_DB.post(url, {value}, {params});
     return result;
 }
+
+export const SVAsFavorite = async(idMovie:number) => {
+    return "";
+}
+
+export const SVWatchlist = async(idMovie:number) => {
+    return "";
+}

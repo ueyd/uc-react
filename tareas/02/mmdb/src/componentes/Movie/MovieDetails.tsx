@@ -65,9 +65,11 @@ const BodyDetails = styled.div`
     margin-top: 10px;
   }
 `
+
 const DivImg = styled.div`
   text-align: center;
 `
+
 interface MovieDetailsModalProps {
   back:any;
   movie?:MovieType;
@@ -158,5 +160,5 @@ export const MovieDetails: React.FC = () => {
     history.goBack();
   };
   
-  return MovieDetailsModal({back, movie, handleRate});//MovieDetailsBody(movie);
+  return MovieDetailsModal({back, movie, handleRate});//: MovieDetailsBody(movie);
 };
