@@ -16,6 +16,9 @@ export type MovieType = {
     voteCount:string;
     posterPath:string;
     releaseDate:string;
+    myVote?:number;
+    isFavorite?:boolean;
+    isWatchlist?:boolean;
 }
 
 export interface IMovieProps{
@@ -353,7 +356,7 @@ export const Movie:React.FC<IMovieProps> = (props) => {
     )
 }
 
-export function MovieResultToMovieType(movieResult:any){
+export function MovieResultToMovieType(movieResult:any, accState:any = null){
     let movie:MovieType = {
         id: movieResult.id,
         originalTitle: movieResult.original_title,
@@ -364,7 +367,10 @@ export function MovieResultToMovieType(movieResult:any){
         voteAverage: movieResult.vote_average,
         voteCount: movieResult.vote_count,
         posterPath: movieResult.poster_path,
-        releaseDate: movieResult.release_date
+        releaseDate: movieResult.release_date,
+        myVote: accState?.rated?.value,
+        isFavorite: accState?.favorite,
+        isWatchlist: accState?.watchlist
     }
     return movie;
 }

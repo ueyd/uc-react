@@ -1,5 +1,5 @@
-import axios from "axios";
-import { config } from "process";
+// import axios from "axios";
+// import { config } from "process";
 import { MovieResultToMovieType } from "../../componentes/Movie/Movie";
 import { THE_MOVIE_DB } from "../../util/Constantes";
 import { GetBasicConfigAxios } from "./Index";
@@ -30,24 +30,35 @@ export const SVGetMovieList = async(url:string, title:string) => {
     return newList;
 }
 
+
+//Url require an session_id
+const urlGetMovieIdAcc = '/movie/{id}/account_states';
 export const SVGetMovieDetails = async(id:string) => {
     let params = GetBasicConfigAxios();
     let url = urlGetMovieDetails.replace("{id}", id);
+    let urlAcc = urlGetMovieIdAcc.replace("{id}", id);
     const moviesResult = await THE_MOVIE_DB.get(url, {params})
         .then(({ data }) => data)
         .catch();
-    console.log(moviesResult);
-    return MovieResultToMovieType(moviesResult);
+    //Esta 
+    let params2 = {
+        api_key: params.params.api_key,
+        session_id:'459a127525ba1c47f99c356b1f9a09b93fc62e5c'
+    } 
+    //Data del user en caso de que tenga session_id
+    const moviesAccResult = await THE_MOVIE_DB.get(urlAcc, {params:params2})
+        .then(({ data }) => data)
+        .catch();
+    return MovieResultToMovieType(moviesResult, moviesAccResult);
 }
 
 export const SVRateMovie = async(idMovie:number, value:number) => {
     let url = urlPostRateMovie.replace('{idMovie}', idMovie.toString());
     let configAxios = GetBasicConfigAxios();
-    console.log(configAxios);
     let params = {
         api_key: configAxios.params.api_key,
         session_id: '459a127525ba1c47f99c356b1f9a09b93fc62e5c'
     };
     const result = await THE_MOVIE_DB.post(url, {value}, {params});
-    console.log(result);
+    return result;
 }

@@ -7,6 +7,7 @@ import { MovieDetails } from "./componentes/Movie/MovieDetails";
 import { Search } from "./componentes/Search";
 import { Profile } from "./componentes/Profile";
 import styled from "styled-components";
+import { Logged } from "./componentes/Auth/Logged";
 
 // const theme = {
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
 				<div>
 					<Switch location={background || location}>
 						<Route exact path="/" children={<Home />} />
+						<Route exact path="/logged" children={<Logged />} />
 						<Route exact path="/search" children={<Search />} />
 						<Route path="/profile" children={<Profile />} />
 					</Switch>

@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom'
 import styled from 'styled-components';
 import logo from '../logo.png'
+import { GetNewToken } from '../services/themoviedb/AuthService';
 
 const NavigationOpts:any = [
     {
@@ -68,6 +69,12 @@ const Header = styled.header`
 `
 
 export const Navigation:React.FC = () => {
+
+    const LogIn = async() => {
+        const token = await GetNewToken();
+        window.open("https://www.themoviedb.org/authenticate/" + token + "?redirect_to=http://localhost:3000/logged", "_blank");
+        console.log(token);
+    }
     /*
      */
     return <Header>
@@ -81,5 +88,6 @@ export const Navigation:React.FC = () => {
             })}
             </ul>
         </nav>
+        <button onClick={() => {LogIn()}}>Log In</button>
     </Header>
 }

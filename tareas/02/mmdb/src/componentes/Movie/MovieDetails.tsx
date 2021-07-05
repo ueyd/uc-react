@@ -23,7 +23,7 @@ const WrapperMovieDetails = styled.div`
 const BtnCerrar = styled.button`
   position: absolute;
   left: calc(100% - 2.5rem);
-    top: 0.5rem;
+  top: 0.5rem;
   float: right;
   border: none;
   width: 2rem;
@@ -45,6 +45,9 @@ const OverView = styled.div`
   width: 60%;
   text-align: justify;
   display: inline-block;
+  h5{
+    margin-bottom: 0.5rem;
+  }
 `
 
 const Info = styled.div`
@@ -65,10 +68,14 @@ const BodyDetails = styled.div`
 const DivImg = styled.div`
   text-align: center;
 `
+interface MovieDetailsModalProps {
+  back:any;
+  movie?:MovieType;
+  handleRate:(value:number) => void;
+}
 
-const MovieDetailsModal = (back:any, movie?:MovieType) => {
+const MovieDetailsModal = ({back, movie, handleRate}:MovieDetailsModalProps) => {
     const urlImage = GetUrlImg(movie?.posterPath);
-    
     return (
     <>
       <Modal
@@ -83,7 +90,7 @@ const MovieDetailsModal = (back:any, movie?:MovieType) => {
                 <BtnCerrar onClick={back}>X</BtnCerrar>
                 <p>{movie?.originalTitle}</p>
                 <DivImg>
-                  <img src={urlImage} />
+                  <img src={urlImage} alt="bkg"/>
                 </DivImg>
                 <BodyDetails>
                   <OverView>
@@ -94,11 +101,12 @@ const MovieDetailsModal = (back:any, movie?:MovieType) => {
                     <h5>Information</h5>
                     <p>Vote: {movie?.voteAverage}</p>
                     <p>Title: {movie?.originalTitle}</p>
+                    <p>Release: {movie?.releaseDate}</p>
                     <p>Lan: {movie?.originalLanguage}</p>
-                    <MovieRating idMovie={movie?.id}/>
+                    {/* Componente de puntuacion */}
+                    <MovieRating idMovie={movie?.id} currentValue={movie?.myVote} handleRate={handleRate}/>
                   </Info>
                 </BodyDetails>
-                {/* Componente de puntuacion */}
             </WrapperMovieDetails>
           </Fade>
       </Modal>
@@ -122,14 +130,25 @@ const MovieDetailsModal = (back:any, movie?:MovieType) => {
 //   );
 // };
 
-export const MovieDetails: React.FC<{}> = ({}) => {
+export const MovieDetails: React.FC = () => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<MovieType>();
 
+  const handleRate = (value:number) => {
+    let movieEdited = movie;
+    console.log(movieEdited);
+    if(movieEdited !== undefined)
+    {
+      movieEdited.myVote = value;
+      setMovie(movieEdited);
+    } 
+  }
+
   useEffect(() => {
     const getMovieAsync = async () => {
-      setMovie(await SVGetMovieDetails(id));
+      const movie = await SVGetMovieDetails(id);
+      setMovie(movie);
     };
     getMovieAsync();
   }, []);
@@ -139,5 +158,5 @@ export const MovieDetails: React.FC<{}> = ({}) => {
     history.goBack();
   };
   
-  return MovieDetailsModal(back, movie);//MovieDetailsBody(movie);
+  return MovieDetailsModal({back, movie, handleRate});//MovieDetailsBody(movie);
 };

@@ -1,11 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { SVRateMovie } from '../../services/themoviedb/MovieService';
-import {GetNewToken} from '../../services/themoviedb/AuthService'
+// import {GetNewToken} from '../../services/themoviedb/AuthService'
+// import { useEffect } from 'react';
+// import { useState } from 'react';
 
-interface MovieRatingProps{
-    idMovie?:number
-}
 
 const Wrapper = styled.div`
 
@@ -20,40 +19,45 @@ const BtnRate = styled.button`
     font-size: 12px;
     margin: 1px;
     cursor: pointer;
+    
 `
 
-const urlPostTokenRatingMovie = '/authentication/token/new';
-const urlAuth = '/authenticate/{token}'
-const urlPostRatingMovie = "/movie/{movie_id}/rating?api_key=7a4b3f42e8f2aa0051b912d4305771c5&session_id={session_id}}";
+interface MovieRatingProps{
+    idMovie?:number,
+    currentValue?:number,
+    handleRate:(value:number) => void
+}
+
 export const MovieRating:React.FC<MovieRatingProps> = (props) => {
 
-    const minRate = 1;
-    const rates = [1,2,3,4,5,6,7,8,9,10];
+    //const minRate = 1;
+    let rates = [];
+    for (let index = 0; index < 10; index++) rates.push(index + 1);
+    const {handleRate, currentValue} = props;
+    //console.log(props.currentValue);
+    // //const {currentValue} = props;
+    //  const [currentValue, setCurrentValue] = useState<number>();
+    // useEffect(() => {
+    //     console.log(props.currentValue);
+    //     //setCurrentValue(props.currentValue);
+    // }, []);
     //Evento generado por el botón
     const DoRating = async(rate:number) => {
-        const payload = {
-            value: rate
-        }
-        if(props.idMovie != undefined)
-        {
-            const res = SVRateMovie(props.idMovie, rate);
-            //const tkn = await GetNewToken();
-            // let token = {data:{request_token:"string"}}
-            // let token = await THE_MOVIE_DB.get(urlPostTokenRatingMovie, {
-            //     params: {
-            //         api_key: '7a4b3f42e8f2aa0051b912d4305771c5'
-            //     }
-            // });
-            // let session = await CREATE_SESSION(token.data.request_token);
-            // let urlPostRatingMovieGen = urlPostRatingMovie.replace("{movie_id}", props.idMovie.toString());
-            // urlPostRatingMovieGen = urlPostRatingMovieGen.replace("{session_id}", token.data.request_token);
-            //let res = await THE_MOVIE_DB.post(urlPostRatingMovieGen, payload);   
-        }
+        const rated = async() => {
+            if(props.idMovie !== undefined) {
+                await SVRateMovie(props.idMovie, rate);
+                handleRate(rate);
+            }
+        };
+        rated();
     }
     return (
         <Wrapper>
             <h6>Rate</h6>
-            {rates.map((rate, idx) => <BtnRate key={idx}  onClick={() => DoRating(rate)}>{rate.toString()}</BtnRate>)}
+            {rates.map((rate, idx) => {
+                //if()
+                return <BtnRate key={idx} className={currentValue === rate ? 'current' : ''} onClick={() => DoRating(rate)}>{rate.toString()}</BtnRate>
+            })}
         </Wrapper>
     )
 }
